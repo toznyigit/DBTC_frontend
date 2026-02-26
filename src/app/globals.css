@@ -1,26 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #09090b;
+  --card: #111113;
+  --card-hover: #18181b;
+  --border: #27272a;
+  --text: #fafafa;
+  --text-muted: #71717a;
+  --accent: #f59e0b;
+  --accent-glow: rgba(245, 158, 11, 0.25);
+  --danger: #ef4444;
+  --success: #22c55e;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Chain link glow animation */
+@keyframes link-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 6px var(--accent-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 18px var(--accent-glow), 0 0 32px var(--accent-glow);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Confetti burst */
+@keyframes confetti-pop {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.4);
+  }
+
+  60% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.chain-dot-completed {
+  background-color: var(--accent);
+  animation: link-glow 2.5s ease-in-out infinite;
+}
+
+.checkin-burst {
+  animation: confetti-pop 0.4s ease-out;
+}
+
+/* Input base */
+input,
+select {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.95rem;
+  transition: border-color 0.15s;
+  width: 100%;
+  font-family: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Button base */
+button {
+  font-family: inherit;
+  cursor: pointer;
 }
