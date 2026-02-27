@@ -10,18 +10,16 @@ import AddHabitModal from '@/components/AddHabitModal';
 
 export default function DashboardPage() {
     const { user, loading: authLoading, logout } = useAuth();
-    const { habits, loading: habitsLoading, error, fetchHabits, addHabit, deleteHabit, toggleCheckin } = useHabits();
+    const { habits, loading: habitsLoading, error, fetchHabits, addHabit, deleteHabit, toggleCheckin, logEntry } = useHabits();
     const [showModal, setShowModal] = useState(false);
     const router = useRouter();
 
-    // Redirect if not authed
     useEffect(() => {
         if (!authLoading && !user) {
             router.replace('/login');
         }
     }, [user, authLoading, router]);
 
-    // Load habits once authenticated
     useEffect(() => {
         if (user) fetchHabits();
     }, [user, fetchHabits]);
@@ -53,7 +51,6 @@ export default function DashboardPage() {
                             </span>
                         </div>
 
-                        {/* Nav tabs */}
                         <nav className="flex items-center gap-1">
                             <span
                                 className="text-xs px-3 py-1.5 rounded-lg font-medium"
@@ -93,7 +90,7 @@ export default function DashboardPage() {
             </header>
 
             <main className="max-w-4xl mx-auto px-4 py-8">
-                {/* Hero stats bar */}
+                {/* Stats bar */}
                 <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -120,7 +117,6 @@ export default function DashboardPage() {
                             whileHover={{ scale: 1.04 }}
                             whileTap={{ scale: 0.96 }}
                             onClick={() => setShowModal(true)}
-                            id="add-habit-btn"
                             className="px-4 py-2 rounded-xl text-sm font-semibold text-black"
                             style={{ background: 'var(--accent)' }}
                         >
@@ -137,10 +133,7 @@ export default function DashboardPage() {
                 ) : error ? (
                     <div className="text-center py-24">
                         <p className="text-red-400 text-sm">{error}</p>
-                        <button
-                            onClick={fetchHabits}
-                            className="mt-3 text-xs text-zinc-400 underline"
-                        >
+                        <button onClick={fetchHabits} className="mt-3 text-xs text-zinc-400 underline">
                             Try again
                         </button>
                     </div>
@@ -174,6 +167,7 @@ export default function DashboardPage() {
                                     habit={habit}
                                     onCheckin={toggleCheckin}
                                     onDelete={deleteHabit}
+                                    onLogEntry={logEntry}
                                 />
                             ))}
                         </AnimatePresence>
@@ -181,7 +175,6 @@ export default function DashboardPage() {
                 )}
             </main>
 
-            {/* Add Habit Modal */}
             {showModal && (
                 <AddHabitModal
                     onAdd={addHabit}

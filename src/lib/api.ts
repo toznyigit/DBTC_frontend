@@ -44,17 +44,24 @@ export const habitsApi = {
     list: () =>
         request<{ habits: Habit[] }>('/habits'),
 
-    create: (name: string, color: string) =>
+    create: (payload: CreateHabitPayload) =>
         request<{ habit: Habit }>('/habits', {
             method: 'POST',
-            body: JSON.stringify({ name, color }),
+            body: JSON.stringify(payload),
         }),
 
     delete: (id: string) =>
-        request<{ message: string }>(`/habits/${id}`, { method: 'DELETE' }),
+        request<{ message: string }>(`/habits/${encodeURIComponent(id)}`, { method: 'DELETE' }),
 
     checkin: (id: string) =>
-        request<CheckinResponse>(`/habits/${id}/checkin`, { method: 'POST' }),
+        request<CheckinResponse>(`/habits/${encodeURIComponent(id)}/checkin`, { method: 'POST' }),
+
+    // For counter and gauge habits: log a value for today
+    logEntry: (id: string, value: number) =>
+        request<CheckinResponse>(`/habits/${encodeURIComponent(id)}/log`, {
+            method: 'POST',
+            body: JSON.stringify({ value }),
+        }),
 };
 
 // --- Types ---
@@ -63,14 +70,45 @@ export interface User {
     email: string;
 }
 
+/**
+ * boolean — simple done/not-done (original behaviour)
+ * counter — user increments a count; fulfilled when count <= goal (or >= goal depending on direction)
+ * gauge   — user logs a numeric value; fulfilled when within ±5% of goal
+ */
+export type HabitType = 'boolean' | 'counter' | 'gauge';
+
+/**
+ * direction only applies to counter type:
+ *   'lte' — fulfilled when count <= goal  (e.g. Stop Smoking: goal 0, want to stay at or below)
+ *   'gte' — fulfilled when count >= goal  (e.g. Drink Water: goal 8, want to reach or exceed)
+ */
+export type CounterDirection = 'lte' | 'gte';
+
 export interface Habit {
     id: string;
     name: string;
     color: string;
     created_at: string;
+    // Habit type config
+    type: HabitType;
+    goal: number | null;               // null for boolean type
+    direction: CounterDirection | null; // only for counter type
+    unit: string | null;               // e.g. 'glasses', 'kcal', 'cigarettes'
+    // Streak data
     streak: number;
     longestStreak: number;
     completions: string[];
+    // Today's logged value (counter/gauge only); null if nothing logged today
+    todayValue: number | null;
+}
+
+export interface CreateHabitPayload {
+    name: string;
+    color: string;
+    type: HabitType;
+    goal: number | null;
+    direction: CounterDirection | null;
+    unit: string | null;
 }
 
 export interface CheckinResponse {
@@ -78,4 +116,5 @@ export interface CheckinResponse {
     streak: number;
     longestStreak: number;
     completions: string[];
+    todayValue: number | null;
 }
