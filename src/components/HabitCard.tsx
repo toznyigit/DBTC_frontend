@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Habit } from '@/lib/api';
-import ChainGrid from './ChainGrid';
+import CalendarGrid from './CalendarGrid';
 import StreakBadge from './StreakBadge';
 
 const PRESET_COLORS = [
@@ -85,8 +85,8 @@ export default function HabitCard({ habit, onCheckin, onDelete }: HabitCardProps
             {/* Streak badges */}
             <StreakBadge streak={habit.streak} longestStreak={habit.longestStreak} />
 
-            {/* Chain grid */}
-            <ChainGrid completions={habit.completions} color={habit.color} />
+            {/* Calendar grid */}
+            <CalendarGrid completions={habit.completions} color={habit.color} />
 
             {/* Check-in button */}
             <motion.button

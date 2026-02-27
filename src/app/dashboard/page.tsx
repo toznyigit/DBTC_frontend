@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/lib/auth-context';
 import { useHabits } from '@/lib/use-habits';
@@ -44,11 +45,34 @@ export default function DashboardPage() {
                 style={{ background: 'rgba(9,9,11,0.85)', backdropFilter: 'blur(12px)', borderBottom: '1px solid var(--border)' }}
             >
                 <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <span className="text-xl">⛓️</span>
-                        <span className="font-bold text-white text-sm tracking-tight hidden sm:block">
-                            Don&apos;t Break The Chain
-                        </span>
+                    <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                            <span className="text-xl">⛓️</span>
+                            <span className="font-bold text-white text-sm tracking-tight hidden sm:block">
+                                Don&apos;t Break The Chain
+                            </span>
+                        </div>
+
+                        {/* Nav tabs */}
+                        <nav className="flex items-center gap-1">
+                            <span
+                                className="text-xs px-3 py-1.5 rounded-lg font-medium"
+                                style={{
+                                    color: 'var(--accent)',
+                                    background: 'rgba(245,158,11,0.1)',
+                                    border: '1px solid rgba(245,158,11,0.2)',
+                                }}
+                            >
+                                Habits
+                            </span>
+                            <Link
+                                href="/calendar"
+                                className="text-xs px-3 py-1.5 rounded-lg transition-all"
+                                style={{ color: 'var(--text-muted)' }}
+                            >
+                                Calendar
+                            </Link>
+                        </nav>
                     </div>
 
                     <div className="flex items-center gap-3">
