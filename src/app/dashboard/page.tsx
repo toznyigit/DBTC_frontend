@@ -12,6 +12,7 @@ export default function DashboardPage() {
     const { user, loading: authLoading, logout } = useAuth();
     const { habits, loading: habitsLoading, error, fetchHabits, addHabit, deleteHabit, toggleCheckin, logEntry } = useHabits();
     const [showModal, setShowModal] = useState(false);
+    const [gridView, setGridView] = useState<'calendar' | 'chain'>('calendar');
     const router = useRouter();
 
     useEffect(() => {
@@ -112,7 +113,21 @@ export default function DashboardPage() {
                         <p className="text-xs text-zinc-500 uppercase tracking-widest mt-0.5">Total streak days</p>
                     </div>
 
-                    <div className="ml-auto">
+                    <div className="ml-auto flex items-center gap-2">
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setGridView(gridView === 'calendar' ? 'chain' : 'calendar')}
+                            className="text-xs px-3 py-2 rounded-xl transition-all font-medium"
+                            style={{
+                                background: 'rgba(245,158,11,0.1)',
+                                color: 'var(--accent)',
+                                border: '1px solid rgba(245,158,11,0.2)',
+                            }}
+                            title={`Switch to ${gridView === 'calendar' ? 'chain' : 'calendar'} view`}
+                        >
+                            {gridView === 'calendar' ? '📊 Calendar' : '⛓️ Chain'}
+                        </motion.button>
                         <motion.button
                             whileHover={{ scale: 1.04 }}
                             whileTap={{ scale: 0.96 }}
@@ -168,6 +183,7 @@ export default function DashboardPage() {
                                     onCheckin={toggleCheckin}
                                     onDelete={deleteHabit}
                                     onLogEntry={logEntry}
+                                    gridView={gridView}
                                 />
                             ))}
                         </AnimatePresence>

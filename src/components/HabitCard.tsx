@@ -3,7 +3,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Habit } from '@/lib/api';
 import ChainGrid from './ChainGrid';
+import CalendarGrid from './CalendarGrid';
 import StreakBadge from './StreakBadge';
+
+type GridView = 'calendar' | 'chain';
 
 const PRESET_COLORS = [
     '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4',
@@ -15,6 +18,7 @@ interface HabitCardProps {
     onCheckin: (id: string) => Promise<{ completed: boolean }>;
     onDelete: (id: string) => Promise<void>;
     onLogEntry: (id: string, value: number) => Promise<{ completed: boolean }>;
+    gridView: GridView;
 }
 
 function todayStr(): string {
@@ -281,7 +285,7 @@ function GaugeControl({
 }
 
 // ─── Main HabitCard ───────────────────────────────────────────────────────────
-export default function HabitCard({ habit, onCheckin, onDelete, onLogEntry }: HabitCardProps) {
+export default function HabitCard({ habit, onCheckin, onDelete, onLogEntry, gridView }: HabitCardProps) {
     const [bursting, setBursting] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(false);
@@ -355,8 +359,32 @@ export default function HabitCard({ habit, onCheckin, onDelete, onLogEntry }: Ha
             {/* Streak */}
             <StreakBadge streak={habit.streak} longestStreak={habit.longestStreak} />
 
-            {/* Chain grid */}
-            <ChainGrid completions={habit.completions} color={habit.color} />
+            {/* Grid view toggle and display */}
+            <div className="flex-1">
+                <AnimatePresence mode="wait">
+                    {gridView === 'calendar' ? (
+                        <motion.div
+                            key="calendar"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <CalendarGrid completions={habit.completions} color={habit.color} />
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="chain"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <ChainGrid completions={habit.completions} color={habit.color} />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
 
             {/* Per-type interaction */}
             {habit.type === 'boolean' && (
