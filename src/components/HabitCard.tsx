@@ -73,19 +73,21 @@ function BooleanControl({
 }) {
     const done = habit.completions.includes(todayStr());
     return (
-        <motion.button
-            onClick={onCheckin}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.96 }}
-            className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-all ${bursting ? 'checkin-burst' : ''}`}
-            style={
-                done
-                    ? { background: `${habit.color}22`, color: habit.color, border: `1px solid ${habit.color}44` }
-                    : { background: habit.color, color: '#000', border: 'none' }
-            }
-        >
-            {done ? '✓ Done today — great job!' : "Mark today's chain link"}
-        </motion.button>
+        <div className="flex flex-col gap-2 min-h-24">
+            <motion.button
+                onClick={onCheckin}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.96 }}
+                className={`w-full py-2.5 rounded-xl text-sm font-semibold transition-all ${bursting ? 'checkin-burst' : ''}`}
+                style={
+                    done
+                        ? { background: `${habit.color}22`, color: habit.color, border: `1px solid ${habit.color}44` }
+                        : { background: habit.color, color: '#000', border: 'none' }
+                }
+            >
+                {done ? '✓ Done today — great job!' : "Mark today's chain link"}
+            </motion.button>
+        </div>
     );
 }
 
@@ -104,7 +106,7 @@ function CounterControl({
     const unit = habit.unit || '';
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 min-h-24">
             {/* Progress bar */}
             <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: '#27272a' }}>
                 <motion.div
@@ -202,7 +204,7 @@ function GaugeControl({
     };
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 min-h-24">
             {/* Progress bar with target zone */}
             <div className="relative w-full h-2 rounded-full overflow-hidden" style={{ background: '#27272a' }}>
                 {/* ±5% target zone indicator */}
