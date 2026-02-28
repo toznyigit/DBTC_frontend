@@ -26,20 +26,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const login = async (email: string, password: string) => {
-        const { user } = await authApi.login(email, password);
+        const { user, token } = await authApi.login(email, password);
         setUser(user);
+        // Store token in localStorage as backup
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('token', token);
+        }
         router.push('/dashboard');
     };
 
     const register = async (email: string, password: string) => {
-        const { user } = await authApi.register(email, password);
+        const { user, token } = await authApi.register(email, password);
         setUser(user);
+        // Store token in localStorage as backup
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('token', token);
+        }
         router.push('/dashboard');
     };
 
     const logout = async () => {
         await authApi.logout();
         setUser(null);
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('token');
+        }
         router.push('/login');
     };
 
